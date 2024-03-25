@@ -46,7 +46,10 @@ class _LoginFormulario extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Form(
-        //TODO:mantener aqui la referencia
+        //TODO:mantener aqui la referencia al key
+
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+
         child: Column(
           children: [
 
@@ -58,6 +61,19 @@ class _LoginFormulario extends StatelessWidget {
                 labelText: 'Correo Electrónico',
                 prefixIcon: Icons.alternate_email_rounded
               ),
+
+              validator: (value) {
+
+                  //Expresion Regular para validar el formato de email correcto en nuestro input (Email)
+                  String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                  RegExp regExp  = new RegExp(pattern);
+
+                  return regExp.hasMatch(value ?? '') //Si lo ingresado hace mach con la expresion regular o esta vacia (retornar un null)
+                  ? null 
+                  
+                  : 'Formato de Email NO VALIDO'; //caso contrario retornar el siguiente Mensaje
+
+              },
             ),
 
             const SizedBox(height: 30),
@@ -71,6 +87,16 @@ class _LoginFormulario extends StatelessWidget {
                 labelText: 'Contraseña',
                 prefixIcon: Icons.lock_clock_outlined
               ),
+
+              validator: (value) {
+
+                  //Condicion con funcion ternaria si elvalor es diferente a null y su long es mayor a 6 retorna un null
+                 return (value != null && value.length >= 6) ? null
+
+                  //caso contrario retorna el siguinete texto:
+                 : 'La contraseña debe tener min 6 caracteres';
+
+              },
             ),
 
             const SizedBox(height: 30),
