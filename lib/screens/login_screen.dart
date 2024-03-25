@@ -127,14 +127,25 @@ class _LoginFormulario extends StatelessWidget {
               elevation: 0,
               color: const Color.fromARGB(255, 2, 88, 5),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                  padding:  const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   child: Text(
-                    'Ingresar', style: TextStyle( color: Colors.white, fontSize: 20),
+                    loginForm.isLoading ? 'Esperar' : 'Ingresar', //Si se esta ejecutando la lectura show Esperar, caso contrario show Ingresar
+                    style:  const TextStyle( color: Colors.white, fontSize: 20),
                   ),
                 ),
               
-              onPressed: () {
+              onPressed: loginForm.isLoading ? null : () async { //si se esta ejecutando la lectura boton desactivado caso contrario activado
+
+                FocusScope.of(context).unfocus(); // si se ejecuta isloading ocultar teclado
+
                if (!loginForm.isValidForm()) return; //si NO es valida las credenciales en el form no hacer nada
+
+               loginForm.isLoading = true;
+
+               await Future.delayed(const Duration(seconds: 2));
+
+                //Validar si el login es correcto
+               loginForm.isLoading = false;
 
                Navigator.pushReplacementNamed(context, 'home'); // Caso contrario Llevar a la pantalla home
               })
