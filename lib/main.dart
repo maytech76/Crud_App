@@ -22,7 +22,12 @@ class MyApp extends StatelessWidget {
       },
 
       theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Colors.grey[350]
+        scaffoldBackgroundColor: Colors.grey[350],
+        appBarTheme: const AppBarTheme(
+          elevation: 1,
+          color: Color.fromARGB(255, 133, 10, 1),
+           
+        )
       ),
     );
   }
