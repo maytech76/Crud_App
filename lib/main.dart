@@ -1,13 +1,34 @@
+// ignore_for_file: unused_element
+
 import 'package:flutter/material.dart';
 import 'package:producto_app/screens/screens.dart';
-/* import 'package:provider/provider.dart'; */
+import 'package:producto_app/services/services.dart';
+import 'package:provider/provider.dart'; 
 
 
-void main() { runApp(const MyApp());
+void main() { runApp(AppState());
 }
+class AppState extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_)=> ProductsService())
+      ],
+
+      child: MyApp(),
+    );
+  }
+}
+
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  
 
   // This widget is the root of your application.
   @override
@@ -19,6 +40,7 @@ class MyApp extends StatelessWidget {
       routes: {
         'login': (_)=> const LoginScreen(),
         'home': (_)=> const HomeScreen(),
+        'productedit': (_)=> const ProductEditScreen(),
       },
 
       theme: ThemeData.light().copyWith(
