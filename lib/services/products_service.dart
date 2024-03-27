@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:producto_app/models/models.dart';
-import 'package:producto_app/services/services.dart';
 import 'package:http/http.dart' as http;
 
 
 class ProductsService extends ChangeNotifier{
-  final String _baseUrl='https://fluttercrud1-e9ad7-default-rtdb.firebaseio.com';
 
-  final List<Products> products = [];
+  final String _baseUrl='fluttercrud1-e9ad7-default-rtdb.firebaseio.com';
+   final List<Products> products = [];
+    bool isloading = true;
 
   //Desarrollar las peticiones fetch
 
@@ -18,15 +18,27 @@ class ProductsService extends ChangeNotifier{
     loadProducts();
   }
 
- Future loadProducts() async{
+
+ Future<List<Products>>loadProducts() async{
+
+  isloading = true;
+  notifyListeners();
    
    final url = Uri.https(_baseUrl, 'products.json');
    final resp = await http.get(url);
 
-   //convertimos el Json recibido en un String 
-   final Map<String, dynamic> productsMap = jsonDecode( resp.body );
+   //convertimos el Json lo recibido en un String 
+   final Map<String, dynamic> productsMap = json.decode( resp.body );
 
-   print(productsMap);
+   productsMap.forEach((key, value) { 
+    final tempProduct = Products.fromMap(value);
+    tempProduct.id = key;
+    products.add( tempProduct );
+   });
+
+   isloading = false; 
+     notifyListeners();
+      return products;
 
    
 

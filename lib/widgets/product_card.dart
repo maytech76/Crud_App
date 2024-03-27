@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:producto_app/models/models.dart';
 
 class ProductCard extends StatelessWidget {
   
+  final Products products;
+
+  const ProductCard({
+    Key? key,
+     required this.products
+     }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric( horizontal: 20),
+      padding: const EdgeInsets.symmetric( horizontal: 20),
       child: Container(
-        margin: EdgeInsets.only(top: 30, bottom: 50),
+        margin: const EdgeInsets.only(top: 30, bottom: 50),
         width: double.infinity,
         height: 400,
         decoration: _cardBorders(),
@@ -16,22 +24,26 @@ class ProductCard extends StatelessWidget {
         child: Stack(
           alignment: Alignment.bottomLeft,
           children: [
-            _BackgroundImage(),
+            _BackgroundImage(products.picture),
 
-            _ProductDetails(),
+            _ProductDetails(
+              title: products.name,
+              subTitle: products.id!,
+            ),
 
             Positioned(
               top:0,
               right: 0,
-              child: _PriceTag()
+              child: _PriceTag(products.price)
             ),
 
             //Mostrar si cumple condiciones de stock
+            if ( !products.available )
             Positioned(
               top:0,
               left: 0,
               child: _availableProduct()
-            )
+            ),
           ],
         ),
     
@@ -79,6 +91,9 @@ class _availableProduct extends StatelessWidget {
 
 class _PriceTag extends StatelessWidget {
  
+  final double price;
+
+  const _PriceTag( this.price );
 
   @override
   Widget build(BuildContext context) {
@@ -90,11 +105,11 @@ class _PriceTag extends StatelessWidget {
         color: Colors.blue,
         borderRadius: BorderRadius.only(topRight: Radius.circular(20), bottomLeft: Radius.circular(15))
       ),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text('\$ 103.99', style: TextStyle(color: Colors.white, fontSize: 15))
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text('\$$price', style: const TextStyle(color: Colors.white, fontSize: 15))
           ),
       ),
     );
@@ -103,28 +118,38 @@ class _PriceTag extends StatelessWidget {
 
 
 class _ProductDetails extends StatelessWidget {
+
+  final String title;
+  final String subTitle;
+
+  const _ProductDetails({
+    required this.title,
+    required this.subTitle
+  });
  
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 100, vertical: 5),
       width: double.infinity,
-      height: 50,
+      height: 55,
       
       decoration: _buildBoxDecoration(),
        
-      child: const Column(
+      child: Column(
          
         crossAxisAlignment: CrossAxisAlignment.center,
        
         children: [
            
-          Text('Disco Duro SSD',
-           style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold ),
+          Text(
+           title,
+           style: const TextStyle( fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold ),
           maxLines: 1, overflow: TextOverflow.ellipsis,
           ),
-          Text('Dettales del Disco',
-           style: TextStyle(fontSize: 15, color: Color.fromARGB(255, 200, 198, 198), ),
+          Text(
+          subTitle,
+           style: const TextStyle(fontSize: 13, color: Color.fromARGB(255, 200, 198, 198), ),
          
           )
         ],
@@ -142,6 +167,9 @@ class _ProductDetails extends StatelessWidget {
 
 class _BackgroundImage extends StatelessWidget {
   
+  final String? url;
+
+  const _BackgroundImage(this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -150,9 +178,17 @@ class _BackgroundImage extends StatelessWidget {
       child: Container(
         width: double.infinity,
           height: 400,
-           child: FadeInImage(
-             placeholder: AssetImage('assets/jar-loading.gif'),
-             image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
+           child: url == null
+           ? const Image(
+            image: AssetImage('assets/no-image.png'),
+            fit: BoxFit.cover            
+            )
+           
+           //Caso contrario
+           :FadeInImage(
+
+             placeholder: const AssetImage('assets/jar-loading.gif'),
+             image: NetworkImage(url!),
              fit: BoxFit.cover,
     
            ),
