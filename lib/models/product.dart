@@ -34,6 +34,9 @@ class Products {
         "price": price,
     };
 
+     
+    //Metodo que regresara un nuevo producto, permitiendo tomar esto datos
+    //para envialos a la pantalla product_edit
     Products copy() => Products(
       available: available,
       name: name,
