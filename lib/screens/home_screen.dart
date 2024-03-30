@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:producto_app/models/models.dart';
 import 'package:producto_app/screens/loading_screen.dart';
 import 'package:producto_app/services/products_service.dart';
 import 'package:producto_app/widgets/widgets.dart';
@@ -44,7 +45,16 @@ class HomeScreen extends StatelessWidget {
           backgroundColor:  const Color.fromARGB(255, 133, 10, 1),
            
           child: const Icon(Icons.add),
-          onPressed:() {}
+          onPressed:() {
+
+            productsService.selectedProduct = Products(
+              name: '', 
+              price: 0, 
+              available: false);
+
+              Navigator.pushNamed(context, 'product');
+
+            }
           ),
     );
   }

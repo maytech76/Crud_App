@@ -40,7 +40,8 @@ class MyApp extends StatelessWidget {
       routes: {
         'login': (_)=> const LoginScreen(),
         'home': (_)=> const HomeScreen(),
-        'productedit': (_)=>  ProductEditScreen(),
+        'productedit': (_) =>  const ProductEditScreen(),
+        'product':(_) => const ProductEditScreen(),
       },
 
       theme: ThemeData.light().copyWith(

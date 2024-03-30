@@ -91,15 +91,15 @@ class _ProductScreenBody extends StatelessWidget {
         ),
       ),
     
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
-        child: Icon(Icons.save_outlined, color: Colors.white),
+        child: const Icon(Icons.save_outlined, color: Colors.white),
         
         onPressed:()async {
 
               if (!productForm.isValidform()) return;
-              
+
               await productService.saveorCreateProduct(productForm.products);
 
            }
@@ -107,6 +107,8 @@ class _ProductScreenBody extends StatelessWidget {
     );
   }
 }
+
+
 
 class _ProductEditForm extends StatelessWidget {
  
