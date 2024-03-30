@@ -1,5 +1,4 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:producto_app/Interfaces/input_decorations.dart';
@@ -11,6 +10,8 @@ import 'package:provider/provider.dart';
 
 
 class ProductEditScreen extends StatelessWidget {
+
+
   const ProductEditScreen({super.key});
 
   
@@ -31,6 +32,8 @@ class ProductEditScreen extends StatelessWidget {
   }
 }
 
+
+
 class _ProductScreenBody extends StatelessWidget {
   const _ProductScreenBody({
     super.key,
@@ -41,6 +44,11 @@ class _ProductScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
+   // Creamos la referencia a ProductFormProvider
+   final productForm = Provider.of<ProductFormProvider>(context);
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -88,8 +96,12 @@ class _ProductScreenBody extends StatelessWidget {
         backgroundColor: Colors.green,
         child: Icon(Icons.save_outlined, color: Colors.white),
         
-        onPressed:() {
-          
+        onPressed:()async {
+
+              if (!productForm.isValidform()) return;
+              
+              await productService.saveorCreateProduct(productForm.products);
+
            }
          ),
     );
@@ -114,6 +126,12 @@ class _ProductEditForm extends StatelessWidget {
 
         //Diseñamos el Formulario
         child: Form(
+
+          //Enviamos argumentos a nuestra edicion de producto
+          key: productForm.formkey,
+
+            //Activamos la Auto Validadcion cuando inicie el usuario interacion con el formulario
+            autovalidateMode: AutovalidateMode.onUserInteraction,
           child: Column(
             children: [
 
@@ -143,8 +161,13 @@ class _ProductEditForm extends StatelessWidget {
               const SizedBox(height:10),
 
               TextFormField(
+
                  //Valor inicial desde product_card
                initialValue:'${ prod.price }',
+
+
+               //Solo Mostrar teclado numerico
+               keyboardType: TextInputType.number,
 
                //Validacion por formato de Caracteres aceptados
                inputFormatters: [
@@ -161,7 +184,7 @@ class _ProductEditForm extends StatelessWidget {
                 }
                },
 
-                keyboardType: TextInputType.number,
+          
                decoration: InputDecorations.authInputDecoration(
                 hintText: '\$150',
                 labelText: 'Precio:'
@@ -173,10 +196,7 @@ class _ProductEditForm extends StatelessWidget {
                 value: prod.available,
                 title: Text('Disponible'),
                 activeColor: Colors.indigo, 
-                onChanged: (value){
-
-                 } 
-                
+                onChanged: (value) => productForm.updateAvaillability(value)
                 ),
              
               const SizedBox(height:30),
@@ -189,6 +209,7 @@ class _ProductEditForm extends StatelessWidget {
       ),
     );
   }
+
 
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
     color: Colors.white,

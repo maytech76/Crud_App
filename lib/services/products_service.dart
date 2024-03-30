@@ -14,8 +14,10 @@ class ProductsService extends ChangeNotifier{
     late Products selectedProduct;
 
 
-    
+
     bool isloading = true;
+
+    bool isSaving = false;
 
   //Desarrollar las peticiones fetch
 
@@ -46,6 +48,46 @@ class ProductsService extends ChangeNotifier{
    isloading = false; 
      notifyListeners();
       return products;
+ }
+
+  //Nuevo metodo para Crear ó Actualizar datos de registro
+
+  Future saveorCreateProduct(Products products) async{
+
+    isSaving = true;
+    notifyListeners();
+
+     if (products.id == null) {
+       //Registramos nuevo producto
+     }else{
+       // Actualizamos Producto Selecionado por id
+       await updateProduct(products);
+     }
+    
+
+    isSaving = false;
+    notifyListeners();
+  }
+
+  //Promesa que al ejecutarse Actulizara los datos de nuestro producto con sus nuevos valores
+  Future<String>updateProduct( Products products ) async{
+     
+     final url = Uri.https(_baseUrl, 'products/${products.id}.json');
+     final resp = await http.put(url, body: products.toJson());
+     final decodedData = resp.body;
+
+
+     print(decodedData);
+
+
+     //Actualizar el listado de productos
+     //Variable INDEX que almacena el indice del producto selecionado en la edicion
+     final index = this.products.indexWhere((element) => element.id == products.id);
+     this.products[index] = products;
+
+     return products.id!;
+     
+  }
 
    
 
@@ -53,4 +95,3 @@ class ProductsService extends ChangeNotifier{
 
  
 
-}
