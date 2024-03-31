@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:producto_app/models/models.dart';
 
 class ProductCard extends StatelessWidget {
@@ -42,7 +42,7 @@ class ProductCard extends StatelessWidget {
             Positioned(
               top:0,
               left: 0,
-              child: _availableProduct()
+              child: _AvailableProduct()
             ),
           ],
         ),
@@ -66,28 +66,29 @@ class ProductCard extends StatelessWidget {
   );
 }
 
-class _availableProduct extends StatelessWidget {
- 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 100,
-      height: 50,
-      alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        color: Color.fromARGB(255, 231, 235, 6),
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(15))
-      ),
-      child: const FittedBox(
-        fit: BoxFit.contain,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: Text('No Disponible', style: TextStyle(color: Colors.black, fontSize: 15))
+// ignore: unused_element
+class _AvailableProduct extends StatelessWidget {
+    
+      @override
+      Widget build(BuildContext context) {
+        return Container(
+          width: 100,
+          height: 50,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 231, 235, 6),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), bottomRight: Radius.circular(15))
           ),
-      ),
-    );
-  }
-}
+          child: const FittedBox(
+            fit: BoxFit.contain,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Text('No Disponible', style: TextStyle(color: Colors.black, fontSize: 15))
+              ),
+          ),
+        );
+      }
+    }
 
 class _PriceTag extends StatelessWidget {
  
@@ -130,7 +131,7 @@ class _ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 100, vertical: 5),
+      padding: EdgeInsets.symmetric(horizontal: 90, vertical: 5),
       width: double.infinity,
       height: 55,
       
@@ -166,33 +167,41 @@ class _ProductDetails extends StatelessWidget {
 
 
 class _BackgroundImage extends StatelessWidget {
-  
+
   final String? url;
 
-  const _BackgroundImage(this.url);
+  const _BackgroundImage(
+    this.url, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
+      borderRadius: BorderRadius.circular(25),
+      child: SizedBox(
         width: double.infinity,
-          height: 400,
-           child: url == null
-           ? const Image(
-            image: AssetImage('assets/no-image.png'),
-            fit: BoxFit.cover            
-            )
-           
-           //Caso contrario
-           :FadeInImage(
-
-             placeholder: const AssetImage('assets/jar-loading.gif'),
-             image: NetworkImage(url!),
-             fit: BoxFit.cover,
-    
-           ),
+        height: 400,
+        child: getImage(url),
       ),
     );
+  }
+
+  Widget getImage(String? picture) {
+    if (picture == null) {
+      
+      return const Image(
+        image: AssetImage('assets/no-image.png'),
+        fit: BoxFit.cover,
+      );
+    }
+    if (picture.startsWith('http')) {
+      return FadeInImage(
+        image: NetworkImage(url!),
+        placeholder: AssetImage('assets/jar-loading.gif'),
+        fit: BoxFit.cover,
+      );
+    }
+    return Image.file(File(picture), fit: BoxFit.cover);
   }
 }

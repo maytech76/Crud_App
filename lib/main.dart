@@ -38,8 +38,8 @@ class MyApp extends StatelessWidget {
       title: 'Productos App',
       initialRoute: 'home',
       routes: {
-        'login': (_)=> const LoginScreen(),
-        'home': (_)=> const HomeScreen(),
+        'login': (_) => const LoginScreen(),
+        'home': (_) => const HomeScreen(),
         'productedit': (_) =>  const ProductEditScreen(),
         'product':(_) => const ProductEditScreen(),
       },

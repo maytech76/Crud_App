@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class ProductEditImage extends StatelessWidget {
@@ -24,17 +26,8 @@ class ProductEditImage extends StatelessWidget {
           opacity: 0.8,
           child: ClipRRect(
             borderRadius: BorderRadius.only( topLeft: Radius.circular(38), topRight: Radius.circular(38) ),
-            child: url == null 
-            ?const Image(
-              image: AssetImage('assets/no-image.png'),
-              fit: BoxFit.cover,
-              )
+            child: getImage(url)
             
-            :FadeInImage(
-              image: NetworkImage(url!),
-              placeholder: const AssetImage('assets/jar-loading.gif'),
-              fit: BoxFit.cover,
-               ),
           ),
         ),
       ),
@@ -53,4 +46,30 @@ class ProductEditImage extends StatelessWidget {
       )
     ]
   );
+
+
+  Widget getImage( String? picture ){
+
+
+     if (picture == null) // Si es Nula Muestra Imagen por defecto en Assets
+      return  Image(
+              image: AssetImage('assets/no-image.png'),
+              fit: BoxFit.cover,
+              );
+    
+     if (picture.startsWith('http'))// Si inicia la ruta con http entonces aplicamos valor url
+
+         return FadeInImage(
+              image: NetworkImage(url!),
+              placeholder: const AssetImage('assets/jar-loading.gif'),
+              fit: BoxFit.cover,
+               );
+
+         return Image.file(
+          File(picture),
+          fit: BoxFit.cover,
+         );   
+
+  }
+
 }
