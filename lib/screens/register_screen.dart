@@ -4,9 +4,9 @@ import 'package:producto_app/providers/login_form_provider.dart';
 import 'package:producto_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class RegisterScreen extends StatelessWidget {
    
-    const LoginScreen({Key? key}) : super(key: key); 
+    /* const RegisterScreen({Key? key}) : super(key: key);  */
   
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 children: [
                    const SizedBox(height: 10),
-                   const Text('Login', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400)),
+                   const Text('Registro', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400)),
                    const SizedBox(height: 30),
 
                    //Notificara si existen cambios en el formulario de login
@@ -38,12 +38,12 @@ class LoginScreen extends StatelessWidget {
              
              const SizedBox(height: 50),
             TextButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, 'register'), 
+              onPressed: () => Navigator.pushReplacementNamed(context, 'login'), 
               style:ButtonStyle(
                 overlayColor: MaterialStateProperty.all(const Color.fromARGB(255, 3, 3, 248).withOpacity(0.1)),
                 shape: MaterialStateProperty.all(const StadiumBorder() )
               ),
-              child: const Text('Crear una Nueva Cuenta', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+              child: const Text('¿Ya tienes una cuenta..?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
               )),
 
           ],
@@ -132,11 +132,11 @@ class _LoginFormulario extends StatelessWidget {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               disabledColor: Colors.grey,
               elevation: 0,
-              color: Color.fromARGB(255, 143, 4, 4),
+              color: const Color.fromARGB(255, 2, 140, 57),
                 child: Container(
                   padding:  const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                   child: Text(
-                    loginForm.isLoading ? 'Esperar' : 'Ingresar', //Si se esta ejecutando la lectura show Esperar, caso contrario show Ingresar
+                    loginForm.isLoading ? 'Esperar' : 'Registrar', //Si se esta ejecutando la lectura show Esperar, caso contrario show Ingresar
                     style:  const TextStyle( color: Colors.white, fontSize: 20),
                   ),
                 ),
