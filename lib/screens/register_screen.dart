@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:producto_app/Interfaces/input_decorations.dart';
 import 'package:producto_app/providers/login_form_provider.dart';
+
+import 'package:producto_app/services/services.dart';
+
 import 'package:producto_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+
+
 
 class RegisterScreen extends StatelessWidget {
    
@@ -144,17 +149,31 @@ class _LoginFormulario extends StatelessWidget {
               onPressed: loginForm.isLoading ? null : () async { //si se esta ejecutando la lectura boton desactivado caso contrario activado
 
                 FocusScope.of(context).unfocus(); // si se ejecuta isloading ocultar teclado
+                final authService = Provider.of<AuthService>(context, listen: false);
 
-               if (!loginForm.isValidForm()) return; //si NO es valida las credenciales en el form no hacer nada
+                 if (!loginForm.isValidForm()) return; //si NO es valida las credenciales en el form no hacer nada
 
-               loginForm.isLoading = true;
+                 loginForm.isLoading = true;
 
-               await Future.delayed(const Duration(seconds: 2));
+               
 
                 //Validar si el login es correcto
-               loginForm.isLoading = false;
+                final String? errorMessage = await authService.createUser(loginForm.email, loginForm.password);
 
-               Navigator.pushReplacementNamed(context, 'home'); // Caso contrario Llevar a la pantalla home
+                  //Aplicamos una condicional si el mensaje de error es nulo, Direccionar al home
+
+                  if (errorMessage == null) {
+                    
+                    Navigator.pushReplacementNamed(context, 'home'); // Caso contrario Llevar a la pantalla home
+                  
+                  }else{//Caso contrario Mostrar Error en pantalla
+                    
+                    print( errorMessage );
+                    loginForm.isLoading = false;
+
+                 }
+
+
               })
 
           ],

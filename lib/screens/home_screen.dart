@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:producto_app/models/models.dart';
-import 'package:producto_app/screens/loading_screen.dart';
-import 'package:producto_app/services/products_service.dart';
+import 'package:producto_app/screens/screens.dart';
+import 'package:producto_app/services/services.dart';
 import 'package:producto_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +17,9 @@ class HomeScreen extends StatelessWidget {
 
    final productsService = Provider.of<ProductsService>(context); 
 
+   //Llamamos a la instancia AthService
+   final authService = Provider.of<AuthService>(context, listen: false);
+
    if (productsService.isloading) return const LoadingScreen();
 
   
@@ -25,6 +28,14 @@ class HomeScreen extends StatelessWidget {
     appBar: AppBar(
         centerTitle: true,
         title: Text('Productos', style: TextStyle(color: Colors.white)),
+         leading: IconButton(
+           icon: Icon( Icons.login_outlined, color: Colors.white),
+            onPressed: (){
+              authService.logout();
+
+              Navigator.pushReplacementNamed(context, 'login');
+          } 
+          ),
       ),
 
       
