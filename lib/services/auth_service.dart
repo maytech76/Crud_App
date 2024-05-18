@@ -27,7 +27,8 @@ final storage = const FlutterSecureStorage();
     
     final Map<String, dynamic> authData = {
       'email': email,
-      'password': password
+      'password': password,
+      'returnSecureToken': true
     };
 
 
@@ -63,7 +64,8 @@ final storage = const FlutterSecureStorage();
     
     final Map<String, dynamic> authData = {
       'email': email,
-      'password': password
+      'password': password,
+      'returnSecureToken': true
     };
 
 

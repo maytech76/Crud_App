@@ -164,7 +164,8 @@ class _LoginFormulario extends StatelessWidget {
                   
                   }else{//Caso contrario Mostrar Error en pantalla
                     
-                    print( errorMessage );
+                    /* print( errorMessage ); */
+                    NotificationsService.showSnackbar(errorMessage);
                     loginForm.isLoading = false;
 
                  }

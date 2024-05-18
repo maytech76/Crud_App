@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:producto_app/models/models.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +13,8 @@ class ProductsService extends ChangeNotifier{
 
   //Propiedad que contiene datos del producto seleccionado en pro a edicion
     late Products selectedProduct;
+
+    final storage = const FlutterSecureStorage();
 
    //Variable donde Almacenamos la Imagen Seleccionada
     File? newPictureFile;
@@ -35,7 +38,9 @@ class ProductsService extends ChangeNotifier{
   isloading = true;
   notifyListeners();
    
-   final url = Uri.https(_baseUrl, 'products.json');
+   final url = Uri.https(_baseUrl, 'products.json', {
+    'auth': await storage.read(key: 'token') ?? ''
+   });
    final resp = await http.get(url);
   
 
@@ -77,7 +82,10 @@ class ProductsService extends ChangeNotifier{
   //Promesa que al ejecutarse Actulizara los datos de nuestro producto con sus nuevos valores
   Future<String>updateProduct( Products products ) async{
      
-     final url = Uri.https(_baseUrl, 'products/${products.id}.json');
+     final url = Uri.https(_baseUrl, 'products/${products.id}.json', {
+       'auth': await storage.read(key: 'token') ?? ''
+     });
+
      final resp = await http.put(url, body: products.toJson());
      final decodedData = resp.body;
 
@@ -97,7 +105,10 @@ class ProductsService extends ChangeNotifier{
   //Promesa que al ejecutarse Creara un nuevo producto con sus  valores
   Future<String>createProduct( Products products ) async {
      
-     final url = Uri.https( _baseUrl, 'products/.json' );
+     final url = Uri.https( _baseUrl, 'products/.json', {
+      'auth': await storage.read(key: 'token') ?? ''
+     });
+     
      final resp = await http.post( url, body: products.toJson() );
      final decodedData = json.decode(resp.body);
 
